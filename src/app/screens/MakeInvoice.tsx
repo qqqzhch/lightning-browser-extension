@@ -5,7 +5,7 @@ import Input from "../components/Form/Input";
 import PaymentSummary from "../components/PaymentSummary";
 import PublisherCard from "../components/PublisherCard";
 import msg from "../../common/lib/msg";
-import utils from "../../common/lib/utils";
+import api from "../../common/lib/api";
 
 type Origin = {
   name: string;
@@ -28,7 +28,7 @@ function MakeInvoice({ invoiceAttributes, origin }: Props) {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState(invoiceAttributes.defaultAmount);
   const [memo, setMemo] = useState(
-    invoiceAttributes.defaultMemo || invoiceAttributes.memo
+    invoiceAttributes.defaultMemo || invoiceAttributes.memo || ""
   );
   const [error, setError] = useState("");
 
@@ -69,9 +69,10 @@ function MakeInvoice({ invoiceAttributes, origin }: Props) {
   }
 
   async function confirm() {
+    if (!value) return;
     try {
       setLoading(true);
-      const response = await utils.call("makeInvoice", {
+      const response = await api.makeInvoice({
         amount: value,
         memo: memo,
       });

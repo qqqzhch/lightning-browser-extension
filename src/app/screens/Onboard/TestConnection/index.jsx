@@ -7,6 +7,7 @@ import Input from "../../../components/Form/Input";
 import Button from "../../../components/Button";
 import Card from "../../../components/Card";
 import utils from "../../../../common/lib/utils";
+import api from "../../../../common/lib/api";
 import Loading from "../../../components/Loading";
 
 const customStyles = {
@@ -52,8 +53,8 @@ export default function TestConnection() {
   function claimSats(event) {
     event.preventDefault();
     setFaucetLoading(true);
-    utils
-      .call("makeInvoice", { amount: faucetAmount, memo: faucetMemo })
+    api
+      .makeInvoice({ amount: faucetAmount, memo: faucetMemo })
       .then((invoice) => {
         axios
           .post(faucetURL, {

@@ -2,6 +2,10 @@ import browser from "webextension-polyfill";
 
 import utils from "./utils";
 import type { Account, SettingsStorage } from "../../types";
+import {
+  MakeInvoiceArgs,
+  MakeInvoiceResponse,
+} from "../../extension/background-script/connectors/connector.interface";
 
 interface AccountInfoRes {
   currentAccountId: string;
@@ -66,6 +70,8 @@ export const swrGetAccountInfo = async (
 };
 export const getSettings = () => utils.call<SettingsStorage>("getSettings");
 export const getStatus = () => utils.call<StatusRes>("status");
+export const makeInvoice = ({ amount, memo }: MakeInvoiceArgs) =>
+  utils.call<MakeInvoiceResponse["data"]>("makeInvoice", { amount, memo });
 export const setSetting = (
   setting: Record<string, string | number | boolean>
 ) =>
@@ -79,6 +85,7 @@ export default {
   getAccountInfo,
   getSettings,
   getStatus,
+  makeInvoice,
   setSetting,
   swr: {
     getAccountInfo: swrGetAccountInfo,
