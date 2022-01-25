@@ -20,10 +20,10 @@ type Props = {
 
 function AllowanceMenu({ allowance, onEdit, onDelete }: Props) {
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [budget, setBudget] = useState<number | undefined>(0);
+  const [budget, setBudget] = useState("0");
 
   function openModal() {
-    setBudget(allowance.totalBudget);
+    setBudget(allowance.totalBudget.toString());
     setIsOpen(true);
   }
 
@@ -34,7 +34,7 @@ function AllowanceMenu({ allowance, onEdit, onDelete }: Props) {
   async function updateAllowance() {
     await utils.call("updateAllowance", {
       id: parseInt(allowance.id),
-      totalBudget: budget,
+      totalBudget: parseInt(budget),
     });
     onEdit && onEdit();
     closeModal();
@@ -95,13 +95,7 @@ function AllowanceMenu({ allowance, onEdit, onDelete }: Props) {
               name="budget"
               placeholder="sat"
               value={budget}
-              onChange={(event) => {
-                setBudget(
-                  !isNaN(event.target.valueAsNumber)
-                    ? event.target.valueAsNumber
-                    : undefined
-                );
-              }}
+              onChange={(e) => setBudget(e.target.value)}
             />
           </div>
         </div>
@@ -110,7 +104,7 @@ function AllowanceMenu({ allowance, onEdit, onDelete }: Props) {
             onClick={updateAllowance}
             label="Save"
             primary
-            disabled={budget === undefined}
+            disabled={budget === ""}
           />
         </div>
       </Modal>
